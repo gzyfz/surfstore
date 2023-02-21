@@ -1,4 +1,4 @@
-module cse224/proj4
+module Surfstore
 
 go 1.17
 

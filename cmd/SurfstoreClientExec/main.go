@@ -1,13 +1,14 @@
 package main
 
 import (
-	"cse224/proj4/pkg/surfstore"
 	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 	"strconv"
+
+	"surfstore"
 )
 
 // Arguments
