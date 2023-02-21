@@ -27,6 +27,8 @@ A command-line argument specifies a “base directory” for the client. This is
 Each file/filename is associated with a version, which is a monotonically increasing positive integer. The version is incremented any time the file is created, modified, or deleted. The purpose of the version is so that clients can detect when they have an out-of-date view of the file hierarchy.
 Note: if two clients try to modify the same file in the cloud concurently, the one that uploads the change later will recieved a "upload failure" flag.
 
+<img width="1140" alt="iShot_2023-02-20_18 15 39" src="https://user-images.githubusercontent.com/114261503/220230681-02cd3e17-b6da-4987-bc6e-19ed9be2385a.png">
+
 ## Usage Details
 
 ### Client
@@ -67,3 +69,13 @@ Output log statements
 (blockStoreAddr*):
 BlockStore address (ip:port) the MetaStore should be initialized with. (Note: if service_type = both, then you should also include the address of the server that you’re starting)
 ```
+
+
+
+## Scalability
+
+still working on it
+
+## Fault-tolerent
+
+still working on it
