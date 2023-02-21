@@ -44,11 +44,11 @@ func main() {
 
 	// Parse command-line arguments and flags
 	debug := flag.Bool("d", false, DEBUG_USAGE)
+
 	flag.Parse()
 
 	// Use tail arguments to hold non-flag arguments
 	args := flag.Args()
-
 	if len(args) != ARG_COUNT {
 		flag.Usage()
 		os.Exit(EX_USAGE)
@@ -57,11 +57,11 @@ func main() {
 	hostPort := args[0]
 	baseDir := args[1]
 	blockSize, err := strconv.Atoi(args[2])
+	log.Println(hostPort, baseDir, blockSize, err)
 	if err != nil {
 		flag.Usage()
 		os.Exit(EX_USAGE)
 	}
-
 	// Disable log outputs if debug flag is missing
 	if !(*debug) {
 		log.SetFlags(0)

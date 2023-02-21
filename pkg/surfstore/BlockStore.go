@@ -2,25 +2,47 @@ package surfstore
 
 import (
 	context "context"
+	"sync"
 )
 
 type BlockStore struct {
 	BlockMap map[string]*Block
+	mtx      sync.Mutex
 	UnimplementedBlockStoreServer
 }
 
 func (bs *BlockStore) GetBlock(ctx context.Context, blockHash *BlockHash) (*Block, error) {
-	panic("todo")
+	bs.mtx.Lock()
+	//protect the content of unchangable when fetch it
+	block := bs.BlockMap[blockHash.Hash]
+	bs.mtx.Unlock()
+	//now set the content back to changable
+	return block, nil
 }
 
 func (bs *BlockStore) PutBlock(ctx context.Context, block *Block) (*Success, error) {
-	panic("todo")
+	hash := GetBlockHashString(block.BlockData)
+	bs.mtx.Lock()
+	//using map to store the blocks
+	bs.BlockMap[hash] = block
+	bs.mtx.Unlock()
+	//could it fail somehow?
+	return &Success{Flag: true}, nil
 }
 
 // Given a list of hashes “in”, returns a list containing the
 // subset of in that are stored in the key-value store
 func (bs *BlockStore) HasBlocks(ctx context.Context, blockHashesIn *BlockHashes) (*BlockHashes, error) {
-	panic("todo")
+	var res []string
+	for _, hash := range blockHashesIn.Hashes {
+		bs.mtx.Lock()
+		_, exist := bs.BlockMap[hash]
+		if exist {
+			res = append(res, hash)
+		}
+		bs.mtx.Unlock()
+	}
+	return &BlockHashes{Hashes: res}, nil
 }
 
 // This line guarantees all method for BlockStore are implemented
