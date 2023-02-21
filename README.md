@@ -2,7 +2,8 @@
 
 ## overview
 
-![Alt text](../iShot_2023-02-20_17.51.45.png)
+<img width="1008" alt="iShot_2023-02-20_17 51 45" src="https://user-images.githubusercontent.com/114261503/220230310-b0c30799-3f71-4d93-8b90-3f16432ed911.png">
+
 
 This is a cloud-based file storage service called SurfStore. SurfStore is a networked file storage application that is based on Dropbox, and lets you sync files to and from the “cloud”. Cloud services are implemented, and a client is designed which interacts with the service via gRPC.
 
@@ -14,7 +15,8 @@ Multiple clients can concurrently connect to the SurfStore service to access a c
 
 A file in SurfStore is broken into an ordered sequence of one or more blocks. Each block is of uniform size (defined by the command line argument), except for the last block in the file, which may be smaller (but must be at least 1 byte large). As an example, assume the block size is 4096 bytes, and consider the following file:
 
-![Alt text](../iShot_2023-02-20_17.55.35.png)
+<img width="1149" alt="iShot_2023-02-20_17 55 35" src="https://user-images.githubusercontent.com/114261503/220230353-bbf67291-f017-43e7-96ca-67ec0d04015a.png">
+
 
 ### The Base Directory
 
