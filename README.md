@@ -94,7 +94,7 @@ Consistent hashing is a distributed hashing technique used to evenly distribute 
 ![Consistent-hashing-Retrieving-data-object](https://user-images.githubusercontent.com/114261503/223372354-8d3ce1f9-b8b6-4024-957c-71d7f634d90a.png)
 
 
-# How It Works
+### How It Works
 
 In consistent hashing, each node in the cluster is assigned a hash value, typically obtained by hashing the node's IP address or name. Data is also hashed to generate a key, which is then assigned to a node in the cluster based on its hash value.
 
@@ -102,7 +102,7 @@ When a node is added or removed from the cluster, the hash values of all the nod
 
 One of the benefits of consistent hashing is that it minimizes the number of keys that need to be reassigned when a node is added or removed, as only the keys that were assigned to the node being added or removed are affected.
 
-# Implementation
+### Implementation
 
 There are several ways to implement consistent hashing, but the most common one is the ring-based implementation. In this implementation, nodes are placed on a ring, with each node being responsible for the data between its hash value and the hash value of its clockwise neighbor.
 
