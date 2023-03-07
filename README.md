@@ -85,11 +85,14 @@ Example: Run surfstore on 2 block servers
 
 
 ## Scalability
+
 updated March,7,2023
 #Overview
 Consistent hashing is a distributed hashing technique used to evenly distribute data among multiple nodes in a cluster or network. It is commonly used in distributed caching systems and load balancers to ensure that data is stored and accessed efficiently across the network.
+![2-Figure1-1](https://user-images.githubusercontent.com/114261503/223372015-2c12c957-1b24-42ef-8ce1-e4697b60ff9d.png)
 
 #How It Works
+
 In consistent hashing, each node in the cluster is assigned a hash value, typically obtained by hashing the node's IP address or name. Data is also hashed to generate a key, which is then assigned to a node in the cluster based on its hash value.
 
 When a node is added or removed from the cluster, the hash values of all the nodes and the data keys are recalculated to ensure that the data is distributed evenly among the remaining nodes.
@@ -97,6 +100,7 @@ When a node is added or removed from the cluster, the hash values of all the nod
 One of the benefits of consistent hashing is that it minimizes the number of keys that need to be reassigned when a node is added or removed, as only the keys that were assigned to the node being added or removed are affected.
 
 #Implementation
+
 There are several ways to implement consistent hashing, but the most common one is the ring-based implementation. In this implementation, nodes are placed on a ring, with each node being responsible for the data between its hash value and the hash value of its clockwise neighbor.
 
 To find which node a key should be assigned to, the key's hash value is computed and then located on the ring. The node responsible for the data range containing the key's hash value is the node to which the key is assigned.
