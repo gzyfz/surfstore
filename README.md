@@ -89,7 +89,10 @@ Example: Run surfstore on 2 block servers
 updated March,7,2023
 #Overview
 Consistent hashing is a distributed hashing technique used to evenly distribute data among multiple nodes in a cluster or network. It is commonly used in distributed caching systems and load balancers to ensure that data is stored and accessed efficiently across the network.
-![2-Figure1-1](https://user-images.githubusercontent.com/114261503/223372015-2c12c957-1b24-42ef-8ce1-e4697b60ff9d.png)
+
+
+![Consistent-hashing-Retrieving-data-object](https://user-images.githubusercontent.com/114261503/223372354-8d3ce1f9-b8b6-4024-957c-71d7f634d90a.png)
+
 
 #How It Works
 
