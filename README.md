@@ -48,6 +48,8 @@ Output log statements
 <block_size>:
 (required) Size of the blocks used to fragment files
 
+
+
 ```
 note: index.db will be maintained automatically, don't modify this file manually.
 ### Server 
@@ -55,7 +57,7 @@ note: index.db will be maintained automatically, don't modify this file manually
 Surfstore is composed of two services: MetaStore and BlockStore. the location of the MetaStore and BlockStore doen't matter at all. In other words, the MetaStore and BlockStore could be serviced by a single server process, separate server processes on the same host, or separate server processes on different hosts. Regardless of where these services reside, the functionality is always the same.
 
 ```
-go run cmd/SurfstoreServerExec/main.go -s <service_type> -p <port> -l -d (blockstoreAddr*)
+go run cmd/SurfstoreServerExec/main.go -s <service_type> -p <port> -l -d (blockstoreAddrs*)
 
 Usage:
 -s <service_type>: 
@@ -66,15 +68,41 @@ Usage:
 Only listen on localhost if included
 -d:
 Output log statements
-(blockStoreAddr*):
-BlockStore address (ip:port) the MetaStore should be initialized with. (Note: if service_type = both, then you should also include the address of the server that you’re starting)
+(blockStoreAddrs*):
+BlockStore addresses (ip:port) the MetaStore should be initialized with. Separated with spaces. 
+
+
+```
+Example: Run surfstore on 2 block servers
+
+```
+> go run cmd/SurfstoreServerExec/main.go -s block -p 8081 -l 
+> go run cmd/SurfstoreServerExec/main.go -s block -p 8082 -l 
+> go run cmd/SurfstoreServerExec/main.go -s meta -l localhost:8081 localhost:8082
+
 ```
 
 
 
 ## Scalability
+updated March,7,2023
+#Overview
+Consistent hashing is a distributed hashing technique used to evenly distribute data among multiple nodes in a cluster or network. It is commonly used in distributed caching systems and load balancers to ensure that data is stored and accessed efficiently across the network.
 
-still working on it
+#How It Works
+In consistent hashing, each node in the cluster is assigned a hash value, typically obtained by hashing the node's IP address or name. Data is also hashed to generate a key, which is then assigned to a node in the cluster based on its hash value.
+
+When a node is added or removed from the cluster, the hash values of all the nodes and the data keys are recalculated to ensure that the data is distributed evenly among the remaining nodes.
+
+One of the benefits of consistent hashing is that it minimizes the number of keys that need to be reassigned when a node is added or removed, as only the keys that were assigned to the node being added or removed are affected.
+
+#Implementation
+There are several ways to implement consistent hashing, but the most common one is the ring-based implementation. In this implementation, nodes are placed on a ring, with each node being responsible for the data between its hash value and the hash value of its clockwise neighbor.
+
+To find which node a key should be assigned to, the key's hash value is computed and then located on the ring. The node responsible for the data range containing the key's hash value is the node to which the key is assigned.
+
+When a node is added or removed from the ring, the data ranges for the affected nodes are recalculated, and the keys are reassigned to the appropriate nodes.
+
 
 ## Fault-tolerent
 
