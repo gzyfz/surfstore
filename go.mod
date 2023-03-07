@@ -1,4 +1,4 @@
-module Surfstore
+module surfstoreModule
 
 go 1.17
 

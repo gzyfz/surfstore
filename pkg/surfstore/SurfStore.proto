@@ -12,6 +12,8 @@ service BlockStore {
     rpc PutBlock (Block) returns (Success) {}
 
     rpc HasBlocks (BlockHashes) returns (BlockHashes) {}
+
+    rpc GetBlockHashes (google.protobuf.Empty) returns (BlockHashes) {}
 }
 
 service MetaStore {
@@ -19,7 +21,9 @@ service MetaStore {
 
     rpc UpdateFile(FileMetaData) returns (Version) {}
 
-    rpc GetBlockStoreAddr(google.protobuf.Empty) returns (BlockStoreAddr) {}
+    rpc GetBlockStoreMap(BlockHashes) returns (BlockStoreMap) {}
+
+    rpc GetBlockStoreAddrs(google.protobuf.Empty) returns (BlockStoreAddrs) {}
 }
 
 message BlockHash {
@@ -53,6 +57,10 @@ message Version {
     int32 version = 1;
 }
 
-message BlockStoreAddr {
-    string addr = 1;
+message BlockStoreMap {
+    map<string, BlockHashes> blockStoreMap = 1;
+}
+
+message BlockStoreAddrs {
+    repeated string blockStoreAddrs = 1;
 }

@@ -16,6 +16,10 @@ type RPCClient struct {
 	BlockSize     int
 }
 
+// This line guarantees all method for RPCClient are implemented
+var _ ClientInterface = new(RPCClient)
+
+
 func (surfClient *RPCClient) GetBlock(blockHash string, blockStoreAddr string, block *Block) error {
 	// connect to the server
 	conn, err := grpc.Dial(blockStoreAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
@@ -109,7 +113,36 @@ func (surfClient *RPCClient) UpdateFile(fileMetaData *FileMetaData, latestVersio
 	return conn.Close()
 }
 
-func (surfClient *RPCClient) GetBlockStoreAddr(blockStoreAddr *string) error {
+
+
+
+// Create an Surfstore RPC client
+func NewSurfstoreRPCClient(hostPort, baseDir string, blockSize int) RPCClient {
+	return RPCClient{
+		MetaStoreAddr: hostPort,
+		BaseDir:       baseDir,
+		BlockSize:     blockSize,
+	}
+}
+
+
+func (surfClient *RPCClient) GetBlockHashes(blockStoreAddr string, blockHashes *[]string) error {
+	conn, err := grpc.Dial(blockStoreAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		return err
+	}
+	c := NewBlockStoreClient(conn)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	res, err := c.GetBlockHashes(ctx,&emptypb.Empty{})
+	if err != nil{
+		return err
+	}
+	*blockHashes = res.Hashes
+	return nil
+}
+
+func (surfClient *RPCClient) GetBlockStoreMap(blockHashesIn []string, blockStoreMap *map[string][]string) error {
 	conn, err := grpc.Dial(surfClient.MetaStoreAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return err
@@ -117,23 +150,28 @@ func (surfClient *RPCClient) GetBlockStoreAddr(blockStoreAddr *string) error {
 	c := NewMetaStoreClient(conn)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	addr, err := c.GetBlockStoreAddr(ctx, &emptypb.Empty{})
+	resultMap,err := c.GetBlockStoreMap(ctx,&BlockHashes{Hashes:blockHashesIn})
+	if err != nil{
+		return err
+	}
+	for key,v := range resultMap.BlockStoreMap{
+		(*blockStoreMap)[key] = v.Hashes
+	}
+	return nil
+}
+
+func (surfClient *RPCClient) GetBlockStoreAddrs(blockStoreAddrs *[]string) error {
+	conn, err := grpc.Dial(surfClient.MetaStoreAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return err
 	}
-	*blockStoreAddr = addr.Addr
-	return conn.Close()
-}
-
-// This line guarantees all method for RPCClient are implemented
-var _ ClientInterface = new(RPCClient)
-
-// Create an Surfstore RPC client
-func NewSurfstoreRPCClient(hostPort, baseDir string, blockSize int) RPCClient {
-
-	return RPCClient{
-		MetaStoreAddr: hostPort,
-		BaseDir:       baseDir,
-		BlockSize:     blockSize,
+	c := NewMetaStoreClient(conn)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	res,err := c.GetBlockStoreAddrs(ctx,&emptypb.Empty{})
+	if err != nil{
+		return err
 	}
+	*blockStoreAddrs = res.BlockStoreAddrs
+	return nil
 }

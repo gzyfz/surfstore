@@ -7,8 +7,7 @@ import (
 	"log"
 	"os"
 	"strconv"
-
-	"surfstore"
+	"surfstoreModule/pkg/surfstore"
 )
 
 // Arguments

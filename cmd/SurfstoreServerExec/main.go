@@ -1,7 +1,6 @@
 package main
 
 import (
-	"cse224/proj4/pkg/surfstore"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -10,6 +9,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"surfstoreModule/pkg/surfstore"
 
 	"google.golang.org/grpc"
 )
@@ -42,11 +42,12 @@ func main() {
 	flag.Parse()
 
 	// Use tail arguments to hold BlockStore address
-	args := flag.Args()
-	blockStoreAddr := ""
-	if len(args) == 1 {
-		blockStoreAddr = args[0]
-	}
+	// args := flag.Args()
+	// blockStoreAddr := ""
+	// if len(args) == 1 {
+	// 	blockStoreAddr = args[0]
+	// }
+	blockStoreAddr := flag.Args()
 
 	// Valid service type argument
 	if _, ok := SERVICE_TYPES[strings.ToLower(*service)]; !ok {
@@ -72,7 +73,7 @@ func main() {
 	}
 }
 
-func startServer(hostAddr string, serviceType string, blockStoreAddr string) error {
+func startServer(hostAddr string, serviceType string, blockStoreAddr []string) error {
 	grpcServer := grpc.NewServer()
 	if serviceType == "both" {
 		metaStore := surfstore.NewMetaStore(blockStoreAddr)
